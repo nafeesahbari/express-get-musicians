@@ -9,7 +9,6 @@ const { Musician } = require('./models/index')
 const app = require('./src/app');
 const seedMusician = require("./seedData");
 
-
 describe('./musicians endpoint', () => {
     // Write your tests here
     beforeAll(async () => {
@@ -143,5 +142,11 @@ describe('./musicians endpoint', () => {
         const deletedMusician = await Musician.findByPk(randomMusician.id);
         expect(deletedMusician).toBeNull();
     });
+
+    it("should get all musicians", async () => {
+        const response = await request(app).get("/musicians");
+        expect(response.status).toBe(200);
+        expect(response.body).toBeInstanceOf(Array);
+      });
     
 })
