@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { Musician } = require("../models/index");
+const { check, validationResult } = require('express-validator') // Part 5, step 2
 
 // router.post, router CRUD:
 
@@ -43,7 +44,10 @@ router.get("/musicians/:id", async (req, res) => {
 });  
 
 // New /musicians route (POST)
-router.post("/musicians", async (req, res) => {
+router.post("/musicians", [ // Part 5 - steps 3, 4, 5
+    check('name').trim().notEmpty().withMessage('Name cannot be empty or contain just whitespace'),
+    check('instrument').trim().notEmpty().withMessage('Instrument cannot be empty or contain just whitespace'),],
+    async (req, res) => {
     try {
         const { name, instrument } = req.body;
         const newMusician = await Musician.create({ name, instrument });
@@ -51,6 +55,10 @@ router.post("/musicians", async (req, res) => {
     } catch (error) {
         console.error("Error creating musician:", error);
         res.status(500).json({ error: "An error occurred while creating musician" });
+    }
+    // Part 5 - steps 6, 7
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: errors.array() });
     }
 });
 

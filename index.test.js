@@ -104,6 +104,27 @@ describe('./musicians endpoint', () => {
         expect(response.body).toMatchObject(newMusicianData);
     });
 
+    // Part 5 - step 10
+    test('POST /musicians', () => {
+        it('responds with errors when name field is empty', async () => {
+          const response = await request(app)
+            .post('/musicians')
+            .send({ instrument: 'Guitar' });
+      
+          expect(response.status).toBe(400);
+          expect(response.body).toHaveProperty('error');
+        });
+      
+        it('responds with errors when instrument field is empty', async () => {
+          const response = await request(app)
+            .post('/musicians')
+            .send({ name: 'John Doe' });
+      
+          expect(response.status).toBe(400);
+          expect(response.body).toHaveProperty('error');
+        });
+      });
+
     test("PUT /musicians/:id should update an existing musician", async () => {
         const musiciansFromDB = await Musician.findAll();
         const randomIndex = Math.floor(Math.random() * musiciansFromDB.length);

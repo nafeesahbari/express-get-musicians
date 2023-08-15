@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../src/app.js');
-const Musician = require('../models/Musician.js');
+const Musician = require('models/Musician.js');
 
 jest.mock("models/Musician.js", () => ({ create: jest.fn()}))
 
